@@ -1,11 +1,38 @@
 
 public class Settings {
+	int minDuration = 0; //in seconds
+	
 	String CharName = "";
 	String InputFile = "";
 	String OutputFileName = "";
 	String OutputFile = "";
 	String Location = "";
-	int minDuration = 0; //in seconds
+	String DesiredStats = "";
+	String Profession = "";
+	String Specialization ="";
+	
+	public String getProfession() {
+		return Profession;
+	}
+	public void setProfession(String profession) {
+		Profession = profession;
+	}
+	public String getSpecialization() {
+		return Specialization;
+	}
+	public void setSpecialization(String specialization) {
+		Specialization = specialization;
+	}
+	
+	
+	
+	public String getDesiredStats() {
+		return DesiredStats;
+	}
+	public void setDesiredStats(String desiredStats) {
+		DesiredStats = desiredStats;
+	}
+	
 
 	
 	public String getLocation() {

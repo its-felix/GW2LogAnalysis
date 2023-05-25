@@ -24,7 +24,7 @@ public class Analysis {
 		File filesList[] = directoryPath.listFiles(); 
 		
 		String outputFileLocation = curSettings.getOutputFile() + "\\" + curSettings.getOutputFileName() + ".csv";
-		parser = new CustomJSONParsing(outputFileLocation);
+		parser = new CustomJSONParsing(outputFileLocation, s);
 		for (File file : filesList) {
 			String fileName = file.getName();
 			int i = fileName.lastIndexOf('.');
@@ -68,12 +68,12 @@ public class Analysis {
 				return;
 			}
 			
+			if (!advancedFilterOkay(player))
+				return;
 			
 			//send information off to CustomJSONParsing to be put into the CSV. 
 			try {
-				
-				if (CustomJSONParsing.writeToCSV(obj, player))
-					CustomJSONParsing.writeNewLine();
+				CustomJSONParsing.writeToCSV(obj, player);
 			} catch (Exception e){
 				System.out.println("something went wrong." + e);
 			}
@@ -86,36 +86,29 @@ public class Analysis {
 		//TODO check for the simple filtering options, such as name,
 		// location, duration, etc. 
 		// all of the info that can be found before turning into a JSONObject. 
-		int duration = 0;
-        String clean = ((String)obj.get("duration")).replaceAll("\\D+",""); //remove non-digits
-        duration += Character.getNumericValue(clean.charAt(0))*10*60;
-        duration += Character.getNumericValue(clean.charAt(1))*60;
-        duration += Character.getNumericValue(clean.charAt(2))*10;
-        duration += Character.getNumericValue(clean.charAt(3));
-		/*
-		System.out.println("duration, location: " + duration + ", " + obj.get("fightName"));
-		System.out.println("desired duration, location: " + curSettings.getMinDuration() + 
-							", " + Constants.LOCATIONS.get(curSettings.getLocation()));
-		*/
-		if (duration < curSettings.getMinDuration() ||
+		if (!obj.containsKey("durationMS"))
+			return false;
+		int durationMS = ((Long)obj.get("durationMS")).intValue();
+
+		if (durationMS < (curSettings.getMinDuration() *100) ||
 				!obj.get("fightName").equals(Constants.LOCATIONS.get(curSettings.getLocation())) ||
 				!obj.containsValue(curSettings.getCharName()))
 			return false;
-		
-		
 		return true;
 		
 	}
 	
-	//generate the header line, containing all the categories, based on your settings.
-	public static String generateHeaders() {
+	private static Boolean advancedFilterOkay(JSONObject obj) {
+		//profession/specialization check
+		if (!curSettings.Profession.equals("Any")) {
+			if (!obj.get("profession").equals(curSettings.getSpecialization())) {
+				System.out.println("The profession you selected doesn't match this characters log file");
+				return false;
+			}
+		}
 		
-		return"To be determined"; 
-	}
-	
-	//creates the CSV file based on the generated strings and output directory/name.
-	public static void createCSVFile() {
 		
+		return true;
 	}
 }
 

@@ -6,15 +6,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
@@ -43,18 +39,19 @@ import javax.swing.JFormattedTextField;
  */
  
 public class MenuGUI {
-
+	static Settings curSettings; 
 	private JFrame frame;
 	private static JTextField textFieldCharName;
 	private static JTextField textFieldSourceDirectory;
 	private static JTextField textFieldOutputDirectory;
 	private static JTextField textFieldOutputName;
-	
-	static Settings curSettings; 
 	private static JTextField textFieldSettingsName;
 	private static JFormattedTextField formattedTextFieldMinDuration;
 	
 	private static JComboBox<String> comboBoxLocation;
+	private static JComboBox<String> comboBoxDesiredStats;
+	private static JComboBox<String> comboBoxProfession;
+	private static JComboBox<String> comboBoxSpecialization;
 
 	/**
 	 * Launch the application.
@@ -70,7 +67,7 @@ public class MenuGUI {
 				}
 
 				try {
-					if(loadLastSettings() == false)
+					if(findLastSettings() == false)
 						curSettings = new Settings();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -99,6 +96,10 @@ public class MenuGUI {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 539, 408);
 		frame.getContentPane().add(tabbedPane);
+		
+		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>(Constants.LOCATIONS.keySet().toArray(String[]::new));
+		
+		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>(Constants.DESIRED_STATS.toArray(String[]::new));
 		
 		JPanel panelMenu = new JPanel();
 		tabbedPane.addTab("Menu", null, panelMenu, null);
@@ -233,8 +234,6 @@ public class MenuGUI {
 		JLabel lblNewLabel_1 = new JLabel("Name of Settings");
 		lblNewLabel_1.setBounds(282, 252, 102, 14);
 		panelMenu.add(lblNewLabel_1);
-		
-		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>(Constants.LOCATIONS.keySet().toArray(String[]::new));
 		comboBoxLocation = new JComboBox<>(comboModel);
 		comboBoxLocation.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -243,39 +242,103 @@ public class MenuGUI {
 				}
 			}
 		});
-		comboBoxLocation.setBounds(76, 53, 176, 22);
+		comboBoxLocation.setBounds(76, 127, 176, 22);
 		panelMenu.add(comboBoxLocation);
 		
 		JLabel lblNewLabel_2 = new JLabel("Location");
-		lblNewLabel_2.setBounds(10, 57, 46, 14);
+		lblNewLabel_2.setToolTipText("Desired location of the battle.");
+		lblNewLabel_2.setBounds(10, 131, 46, 14);
 		panelMenu.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Min Duration (sec)");
-		lblNewLabel_3.setBounds(10, 82, 89, 14);
+		lblNewLabel_3.setToolTipText("Minimum duration of the fight log for it to be parsed into csv file, in seconds.");
+		lblNewLabel_3.setBounds(10, 156, 89, 14);
 		panelMenu.add(lblNewLabel_3);
 		
 		formattedTextFieldMinDuration = new JFormattedTextField();
-		formattedTextFieldMinDuration.setBounds(134, 79, 118, 20);
-		formattedTextFieldMinDuration.setValue(new Integer(0));
+		formattedTextFieldMinDuration.setBounds(134, 153, 118, 20);
+		formattedTextFieldMinDuration.setValue(Integer.valueOf(0));
 		formattedTextFieldMinDuration.setColumns(10);
 		panelMenu.add(formattedTextFieldMinDuration);
+		comboBoxDesiredStats = new JComboBox<>(cm);
+		comboBoxDesiredStats.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange()==ItemEvent.SELECTED) {
+					curSettings.setDesiredStats(String.valueOf(comboBoxDesiredStats.getSelectedItem()));
+				}
+			}
+		});
+		comboBoxDesiredStats.setBounds(122, 181, 130, 22);
+		panelMenu.add(comboBoxDesiredStats);
+		
+		JLabel lblNewLabel_4 = new JLabel("Desired Stats");
+		lblNewLabel_4.setToolTipText("Stats to display (additional filering can be done in the Settings tab.)");
+		lblNewLabel_4.setBounds(10, 185, 79, 14);
+		panelMenu.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_5 = new JLabel("Profession");
+		lblNewLabel_5.setToolTipText("Profession/class of character");
+		lblNewLabel_5.setBounds(10, 58, 63, 14);
+		panelMenu.add(lblNewLabel_5);
+		
+		comboBoxProfession = new JComboBox<String>(new DefaultComboBoxModel<String>(Constants.profSpec.keySet().toArray(String[]::new)));
+		comboBoxProfession.setSelectedItem("Any");
+		comboBoxProfession.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange()==ItemEvent.SELECTED) {
+					String v = String.valueOf(comboBoxProfession.getSelectedItem());
+					curSettings.setProfession(v);
+					comboBoxSpecialization.setModel(new DefaultComboBoxModel<String>(Constants.profSpec.get(v).toArray(String[]::new)));
+				}
+			}
+		});
+		comboBoxProfession.setBounds(99, 54, 153, 22);
+		panelMenu.add(comboBoxProfession);
+		
+		JLabel lblNewLabel_6 = new JLabel("Specialization");
+		lblNewLabel_6.setToolTipText("Specialization of you character.");
+		lblNewLabel_6.setBounds(10, 84, 79, 14);
+		panelMenu.add(lblNewLabel_6);
+		
+		
+		comboBoxSpecialization = new JComboBox<String>();
+		comboBoxSpecialization.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange()==ItemEvent.SELECTED) {
+					curSettings.setSpecialization(String.valueOf(comboBoxSpecialization.getSelectedItem()));
+				}
+			}
+		});
+		comboBoxSpecialization.setBounds(122, 87, 130, 22);
+		panelMenu.add(comboBoxSpecialization);
 		
 		JPanel panelSettings = new JPanel();
 		tabbedPane.addTab("Settings", null, panelSettings, null);
 		
 		
+		
+		
 	}
 	
+	//TODO: exception catching here... sounds like a pain though.
+	//Updates fields based on current settings. 
 	private static void updateTextFields() {
 		textFieldCharName.setText(curSettings.getCharName());
 		textFieldSourceDirectory.setText(curSettings.getInputFile());
 		textFieldOutputDirectory.setText(curSettings.getOutputFile());
 		textFieldOutputName.setText(curSettings.getOutputFileName());
+		
 		comboBoxLocation.setSelectedItem(curSettings.getLocation());
+		comboBoxDesiredStats.setSelectedItem(curSettings.getDesiredStats());
+		comboBoxProfession.setSelectedItem(curSettings.getProfession());
+		comboBoxSpecialization.setSelectedItem(curSettings.getSpecialization());
+		comboBoxSpecialization.setModel(new DefaultComboBoxModel<String>(Constants.profSpec.get(curSettings.getProfession()).toArray(String[]::new)));
+		
 		formattedTextFieldMinDuration.setValue(curSettings.getMinDuration());
 		System.out.println("Char name is now" + curSettings.getCharName());
 	}
 	
+	//saves current fields to settings. 
 	private void saveTextFields() {
 		curSettings.setCharName(textFieldCharName.getText());
 		curSettings.setInputFile(textFieldSourceDirectory.getText());
@@ -285,15 +348,17 @@ public class MenuGUI {
 		curSettings.setMinDuration(Integer.parseInt(formattedTextFieldMinDuration.getText()));
 		
 		
-		
-		
-		
 		curSettings.setLocation(String.valueOf(comboBoxLocation.getSelectedItem()));
+		curSettings.setDesiredStats(String.valueOf(comboBoxDesiredStats.getSelectedItem()));
+		curSettings.setProfession(String.valueOf(comboBoxProfession.getSelectedItem()));
+		curSettings.setSpecialization(String.valueOf(comboBoxSpecialization.getSelectedItem()));
 		
 		
 		System.out.println("Char name is now" + curSettings.getCharName());
 		
 	}
+	
+	//TODO: Should the following functions be moved to a helper class and into settings? 
 	
 	public static File selectDirectory() {
 		File directory = new File(System.getProperty("user.dir"));
@@ -307,9 +372,12 @@ public class MenuGUI {
 		return null;
 	}
 	
-	public static Boolean loadLastSettings()
+	/*
+	 * Searches through settings file for most recently used settings file.
+	 * If found, will load it. If not found, returns false and allows creation of new settings.  
+	 */
+	public static Boolean findLastSettings()
 	{
-	    //File settingsDirFile = new File(".\\Settings");
 	    File directory = new File(System.getProperty("user.dir") +"\\Settings");
 	    System.out.println(directory.getPath());
 	    File[] files = directory.listFiles(File::isFile);
@@ -340,6 +408,7 @@ public class MenuGUI {
 	    return true;
 	}
 	
+	//given the absolute path of the settings file, will load and run functions to update settings and fields. 
 	public static void loadSettings(String fileName) {
 		try {
 			ObjectMapper mapper = new XmlMapper(); 
@@ -349,7 +418,6 @@ public class MenuGUI {
 			inputStream.close();
 			updateTextFields();
 			textFieldSettingsName.setText(getFileName(fileName));
-			//System.out.println("outputfile is: " + curSettings.getOutputFile() + "\\" + curSettings.getOutputFileName());
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -363,6 +431,7 @@ public class MenuGUI {
 		}
 		return "";
 	}
+	
 	public static String getFileName(String fileLoc) {
 		Path p = Paths.get(fileLoc);
 		String fileName = p.getFileName().toString();
