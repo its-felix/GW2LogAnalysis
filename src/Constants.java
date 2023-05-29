@@ -19,7 +19,13 @@ public final class Constants {
 	public static Map<String, List<String>> HEADERS = new HashMap<String, List<String>>() {{
 		put("general", Arrays.asList("fightName", "success", "durationMS"));
 		put("statsAll", Arrays.asList("distToCom", "swapCount", "totalDmg"));
+		put("defenses", Arrays.asList("damageTaken","damageBarrier","blockedCount","evadedCount","damageBarrier"));
+		//support: healing and boon strips.
 		put("support", Arrays.asList("resurrects", "condiCleanse", "condiCleanseSelf", "boonStrips"));
+		put("outgoingHealing", Arrays.asList("hps", "healing")); //array object one. outgoingHelaing is inside extHealingStats. 
+		//Damage:
+		put("dpsAll", Arrays.asList("dps", "damage", "condiDPS", "condiDamage", "powerDps", "powerDamage"));
+		
 	}};
 	
 	//Professions and specializations:
@@ -37,6 +43,17 @@ public final class Constants {
 		put("Mesmer",Arrays.asList("Mesmer","Chronomancer","Mirage","Virtuoso"));
 		put("Necromancer",Arrays.asList("Necromancer","Reaper","Scourge","Harbinger"));
 	}};
+	
+	public static final List<String> BOON_TABLE_CHECKS = Arrays.asList("Aegis", "Fury", "Might", "Protection", "Quickness",
+								"Regeneration", "Resistance", "Retaliation", "Stability", "Swiftness", "Vigor");
+
+	public static Map<String, List<String>> PROFESSION_BUFFS_TABLE_CHECKS = new HashMap<String, List<String>>(){{
+		put("Elementalist", Arrays.asList("Air Att.","Fire Att.","Water Att.","Earth Att.","Soothing Mist","Flame Axe","Fiery Greatsword","Earth Shield","Lightnight Hammer","Ice Bow"));
+		put("Thief", Arrays.asList("Bounding Dodge", "Lotus Training","Unhindered Combatant", "Devourer Venom","Skale Venom", "Basilisk Venom", "Revealed","Stealth"));
+	}};
+	
+	
+	
 	
 	
 	//buffs, more details found at https://wiki.guildwars2.com/wiki/User:Frvwfr2/buffids
@@ -72,6 +89,30 @@ public final class Constants {
 		put(13133, "Basilisk Venom");
 		put(890, "Revealed");
 		put(13017, "Stealth");
+		
+		//Warrior
+		put(14222,"Empower Allies");
+		put(14417,"Strength Banner");
+		put(14449,"Discipline Banner");
+		put(14543,"Defence Banner");
+		put(14450,"Tactics Banner");
+		
+		//Revenant
+		put(27890, "Shiro");
+		put(27581,"Impossible Odds");
+		put(27972,"Ventari");
+		put(27928, "Mallyx");
+		put(28001,"Embrace the Darkness");
+		put(27205,"Jalis");
+		put(27273,"Vengeful Hammers");
+		put(27732,"Glint");
+		put(29379,"Naturalistic Resonance");
+		put(42883,"Kalla's Fervor");
+		put(44682,"Breakrazo's Bastion");
+		put(41016,"Razorclaw's Rage");
+		put(45026,"Soulcleave's SUmmit");
+		put(26854,"Assassin's Presence");
+		put(26646,"Battle Scars");
 		
 		//Elementalist
 		put(5575, "Air Att.");

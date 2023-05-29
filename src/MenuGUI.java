@@ -4,8 +4,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -26,14 +27,20 @@ import javax.swing.JComboBox;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.JFormattedTextField;
- 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JCheckBox;
+import javax.swing.LayoutStyle.ComponentPlacement;
  
 
 
 /*
  * TODO: 
- * 
- * 
+ * BIGGEST: Find a better way to order/generate the info from JSON. right now it's chaos. 
+ * 1. display the JSON files in the folder when selecting a source destination. Same with csv files in output destiniation.
+ * 2. Find a way to insert the URL links too. One way would to to check the source file for files with the same name, but using the "url" extension. 
+ * 3. when overwriting a file, add a warning message. 
+ * 4. warn if the application is open in another window, so it can't write to it? 
  * 
  * 
  */
@@ -41,6 +48,7 @@ import javax.swing.JFormattedTextField;
 public class MenuGUI {
 	static Settings curSettings; 
 	private JFrame frame;
+	JLabel lblSourceJSONCount;
 	private static JTextField textFieldCharName;
 	private static JTextField textFieldSourceDirectory;
 	private static JTextField textFieldOutputDirectory;
@@ -52,6 +60,11 @@ public class MenuGUI {
 	private static JComboBox<String> comboBoxDesiredStats;
 	private static JComboBox<String> comboBoxProfession;
 	private static JComboBox<String> comboBoxSpecialization;
+	
+	private static BuffWindow boonWindow;
+	private static JCheckBox chckbxBoonsEnabled;
+	private static BuffWindow professionBuffWindow;
+	private static JCheckBox chckbxProfessionBuffsEnabled;
 
 	/**
 	 * Launch the application.
@@ -69,6 +82,14 @@ public class MenuGUI {
 				try {
 					if(findLastSettings() == false)
 						curSettings = new Settings();
+						boonWindow = new BuffWindow(curSettings.getBoonSettings(), Constants.BOON_TABLE_CHECKS);
+						if (curSettings.getProfession().equals("Any"))
+							professionBuffWindow = new BuffWindow(curSettings.getBoonSettings(), 
+									new ArrayList<String>(Constants.PROFESSION_BUFFS_TABLE_CHECKS.values().stream()
+											.flatMap(List::stream).collect(Collectors.toList())) 
+									);
+						else
+							professionBuffWindow = new BuffWindow(curSettings.getBoonSettings(), Constants.PROFESSION_BUFFS_TABLE_CHECKS.get("Elementalist"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -91,11 +112,8 @@ public class MenuGUI {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 555, 447);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 539, 408);
-		frame.getContentPane().add(tabbedPane);
 		
 		DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>(Constants.LOCATIONS.keySet().toArray(String[]::new));
 		
@@ -103,41 +121,28 @@ public class MenuGUI {
 		
 		JPanel panelMenu = new JPanel();
 		tabbedPane.addTab("Menu", null, panelMenu, null);
-		panelMenu.setLayout(null);
 		
 		//Run Activate the main program. 
 		JButton btnNewButton = new JButton("Run");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Analysis parse=new Analysis(); 
-				parse.main(curSettings);
+				//Analysis parse=new Analysis(); 
+				Analysis.main(curSettings);
 			}
 		});
-		btnNewButton.setBounds(422, 349, 89, 23);
-		panelMenu.add(btnNewButton);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 296, 534, 8);
-		panelMenu.add(separator);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(262, 0, 10, 294);
-		panelMenu.add(separator_1);
 		
 		JLabel labelName = new JLabel("Name");
 		labelName.setToolTipText("The character name for the character you're filtering for.");
-		labelName.setBounds(10, 25, 46, 14);
-		panelMenu.add(labelName);
 		
 		textFieldCharName = new JTextField();
-		textFieldCharName.setBounds(66, 22, 186, 20);
-		panelMenu.add(textFieldCharName);
 		textFieldCharName.setColumns(10);
 		
 		textFieldSourceDirectory = new JTextField();
-		textFieldSourceDirectory.setBounds(99, 306, 233, 20);
-		panelMenu.add(textFieldSourceDirectory);
 		textFieldSourceDirectory.setColumns(10);
 		
 		JButton btnNewButton_1 = new JButton("Source Directory");
@@ -148,10 +153,9 @@ public class MenuGUI {
 					return;
 				String fileName=f.getAbsolutePath();
 				textFieldSourceDirectory.setText(fileName);
+				lblSourceJSONCount.setText("Files Found: "+FileHelper.getFileCount(f, ".json"));
 			}
 		});
-		btnNewButton_1.setBounds(0, 305, 89, 23);
-		panelMenu.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("Output directory");
 		btnNewButton_2.addActionListener(new ActionListener() {
@@ -164,21 +168,13 @@ public class MenuGUI {
 					textFieldOutputDirectory.setText(fileName);
 			}
 		});
-		btnNewButton_2.setBounds(0, 331, 89, 23);
-		panelMenu.add(btnNewButton_2);
 		
 		JLabel lblNewLabel = new JLabel("Output Name");
-		lblNewLabel.setBounds(10, 358, 75, 14);
-		panelMenu.add(lblNewLabel);
 		
 		textFieldOutputDirectory = new JTextField();
-		textFieldOutputDirectory.setBounds(102, 331, 216, 20);
-		panelMenu.add(textFieldOutputDirectory);
 		textFieldOutputDirectory.setColumns(10);
 		
 		textFieldOutputName = new JTextField();
-		textFieldOutputName.setBounds(96, 354, 226, 20);
-		panelMenu.add(textFieldOutputName);
 		textFieldOutputName.setColumns(10);
 		
 		JButton btnSaveSettings = new JButton("Save Settings");
@@ -202,8 +198,6 @@ public class MenuGUI {
 				}
 			}
 		});
-		btnSaveSettings.setBounds(422, 262, 102, 23);
-		panelMenu.add(btnSaveSettings);
 		
 		JButton btnLoadSettings = new JButton("Load Settings");
 		btnLoadSettings.addActionListener(new ActionListener() {
@@ -223,17 +217,11 @@ public class MenuGUI {
 				}
 			}
 		});
-		btnLoadSettings.setBounds(422, 215, 102, 23);
-		panelMenu.add(btnLoadSettings);
 		
 		textFieldSettingsName = new JTextField();
-		textFieldSettingsName.setBounds(282, 265, 119, 20);
-		panelMenu.add(textFieldSettingsName);
 		textFieldSettingsName.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Name of Settings");
-		lblNewLabel_1.setBounds(282, 252, 102, 14);
-		panelMenu.add(lblNewLabel_1);
 		comboBoxLocation = new JComboBox<>(comboModel);
 		comboBoxLocation.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -242,24 +230,16 @@ public class MenuGUI {
 				}
 			}
 		});
-		comboBoxLocation.setBounds(76, 127, 176, 22);
-		panelMenu.add(comboBoxLocation);
 		
 		JLabel lblNewLabel_2 = new JLabel("Location");
 		lblNewLabel_2.setToolTipText("Desired location of the battle.");
-		lblNewLabel_2.setBounds(10, 131, 46, 14);
-		panelMenu.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Min Duration (sec)");
 		lblNewLabel_3.setToolTipText("Minimum duration of the fight log for it to be parsed into csv file, in seconds.");
-		lblNewLabel_3.setBounds(10, 156, 89, 14);
-		panelMenu.add(lblNewLabel_3);
 		
 		formattedTextFieldMinDuration = new JFormattedTextField();
-		formattedTextFieldMinDuration.setBounds(134, 153, 118, 20);
 		formattedTextFieldMinDuration.setValue(Integer.valueOf(0));
 		formattedTextFieldMinDuration.setColumns(10);
-		panelMenu.add(formattedTextFieldMinDuration);
 		comboBoxDesiredStats = new JComboBox<>(cm);
 		comboBoxDesiredStats.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -268,18 +248,12 @@ public class MenuGUI {
 				}
 			}
 		});
-		comboBoxDesiredStats.setBounds(122, 181, 130, 22);
-		panelMenu.add(comboBoxDesiredStats);
 		
 		JLabel lblNewLabel_4 = new JLabel("Desired Stats");
 		lblNewLabel_4.setToolTipText("Stats to display (additional filering can be done in the Settings tab.)");
-		lblNewLabel_4.setBounds(10, 185, 79, 14);
-		panelMenu.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel_5 = new JLabel("Profession");
 		lblNewLabel_5.setToolTipText("Profession/class of character");
-		lblNewLabel_5.setBounds(10, 58, 63, 14);
-		panelMenu.add(lblNewLabel_5);
 		
 		comboBoxProfession = new JComboBox<String>(new DefaultComboBoxModel<String>(Constants.profSpec.keySet().toArray(String[]::new)));
 		comboBoxProfession.setSelectedItem("Any");
@@ -287,18 +261,23 @@ public class MenuGUI {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange()==ItemEvent.SELECTED) {
 					String v = String.valueOf(comboBoxProfession.getSelectedItem());
+					if (v.equals(curSettings.getProfession()))
+						return;
 					curSettings.setProfession(v);
 					comboBoxSpecialization.setModel(new DefaultComboBoxModel<String>(Constants.profSpec.get(v).toArray(String[]::new)));
+					if (v.equals("Any"))
+						professionBuffWindow = new BuffWindow(curSettings.getBoonSettings(), 
+								new ArrayList<String>(Constants.PROFESSION_BUFFS_TABLE_CHECKS.values().stream()
+										.flatMap(List::stream).collect(Collectors.toList())) 
+								);
+					else 
+					professionBuffWindow.changeTableObject(Constants.PROFESSION_BUFFS_TABLE_CHECKS.get(v));
 				}
 			}
 		});
-		comboBoxProfession.setBounds(99, 54, 153, 22);
-		panelMenu.add(comboBoxProfession);
 		
 		JLabel lblNewLabel_6 = new JLabel("Specialization");
 		lblNewLabel_6.setToolTipText("Specialization of you character.");
-		lblNewLabel_6.setBounds(10, 84, 79, 14);
-		panelMenu.add(lblNewLabel_6);
 		
 		
 		comboBoxSpecialization = new JComboBox<String>();
@@ -309,13 +288,211 @@ public class MenuGUI {
 				}
 			}
 		});
-		comboBoxSpecialization.setBounds(122, 87, 130, 22);
-		panelMenu.add(comboBoxSpecialization);
+		
+		lblSourceJSONCount = new JLabel("Files Detected: 0");
+		GroupLayout gl_panelMenu = new GroupLayout(panelMenu);
+		gl_panelMenu.setHorizontalGroup(
+			gl_panelMenu.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelMenu.createSequentialGroup()
+					.addGap(10)
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(labelName, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+							.addGap(10)
+							.addComponent(textFieldCharName, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(lblNewLabel_5, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+							.addGap(26)
+							.addComponent(comboBoxProfession, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+							.addGap(33)
+							.addComponent(comboBoxSpecialization, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+							.addGap(20)
+							.addComponent(comboBoxLocation, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+							.addGap(35)
+							.addComponent(formattedTextFieldMinDuration, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+							.addGap(33)
+							.addComponent(comboBoxDesiredStats, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)))
+					.addGap(10)
+					.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldSettingsName, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE))
+					.addGap(21)
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnLoadSettings, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnSaveSettings, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)))
+				.addComponent(separator, GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+				.addGroup(gl_panelMenu.createSequentialGroup()
+					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(textFieldSourceDirectory, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblSourceJSONCount)
+					.addContainerGap(152, Short.MAX_VALUE))
+				.addGroup(gl_panelMenu.createSequentialGroup()
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addGap(10)
+							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)))
+					.addGap(7)
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addGap(6)
+							.addComponent(textFieldOutputDirectory, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textFieldOutputName, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE))
+					.addGap(100)
+					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
+		);
+		gl_panelMenu.setVerticalGroup(
+			gl_panelMenu.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelMenu.createSequentialGroup()
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addGap(22)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelMenu.createSequentialGroup()
+									.addGap(3)
+									.addComponent(labelName))
+								.addComponent(textFieldCharName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(12)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelMenu.createSequentialGroup()
+									.addGap(4)
+									.addComponent(lblNewLabel_5))
+								.addComponent(comboBoxProfession, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(8)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel_6)
+								.addGroup(gl_panelMenu.createSequentialGroup()
+									.addGap(3)
+									.addComponent(comboBoxSpecialization, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addGap(18)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelMenu.createSequentialGroup()
+									.addGap(4)
+									.addComponent(lblNewLabel_2))
+								.addComponent(comboBoxLocation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(4)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelMenu.createSequentialGroup()
+									.addGap(3)
+									.addComponent(lblNewLabel_3))
+								.addComponent(formattedTextFieldMinDuration, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(8)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelMenu.createSequentialGroup()
+									.addGap(4)
+									.addComponent(lblNewLabel_4))
+								.addComponent(comboBoxDesiredStats, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(separator_1, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addGap(252)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel_1)
+								.addGroup(gl_panelMenu.createSequentialGroup()
+									.addGap(13)
+									.addComponent(textFieldSettingsName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addGap(215)
+							.addComponent(btnLoadSettings)
+							.addGap(24)
+							.addComponent(btnSaveSettings)))
+					.addGap(2)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 8, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnNewButton_1)
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addGap(1)
+							.addGroup(gl_panelMenu.createParallelGroup(Alignment.BASELINE)
+								.addComponent(textFieldSourceDirectory, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblSourceJSONCount))))
+					.addGap(3)
+					.addGroup(gl_panelMenu.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(btnNewButton_2)
+							.addGap(4)
+							.addComponent(lblNewLabel))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addComponent(textFieldOutputDirectory, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(3)
+							.addComponent(textFieldOutputName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panelMenu.createSequentialGroup()
+							.addGap(18)
+							.addComponent(btnNewButton))))
+		);
+		panelMenu.setLayout(gl_panelMenu);
 		
 		JPanel panelSettings = new JPanel();
 		tabbedPane.addTab("Settings", null, panelSettings, null);
 		
+		JButton btnOpenBoonsWindow = new JButton("Boons Settings");
+		btnOpenBoonsWindow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boonWindow.setWindowVisible();
+			}
+		});
 		
+		chckbxBoonsEnabled = new JCheckBox("Boons Enabled");
+		
+		JButton btnOpenProfessionBuffsWindow = new JButton("Profession Buffs Settings");
+		btnOpenProfessionBuffsWindow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				professionBuffWindow.setWindowVisible();
+			}
+		});
+		
+		chckbxProfessionBuffsEnabled = new JCheckBox("Profession Buffs Enabled");
+		
+		GroupLayout gl_panelSettings = new GroupLayout(panelSettings);
+		gl_panelSettings.setHorizontalGroup(
+			gl_panelSettings.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelSettings.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelSettings.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(btnOpenProfessionBuffsWindow, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnOpenBoonsWindow, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panelSettings.createParallelGroup(Alignment.LEADING)
+						.addComponent(chckbxBoonsEnabled, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+						.addComponent(chckbxProfessionBuffsEnabled))
+					.addContainerGap(261, Short.MAX_VALUE))
+		);
+		gl_panelSettings.setVerticalGroup(
+			gl_panelSettings.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelSettings.createSequentialGroup()
+					.addGap(24)
+					.addGroup(gl_panelSettings.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnOpenBoonsWindow)
+						.addComponent(chckbxBoonsEnabled))
+					.addGap(28)
+					.addGroup(gl_panelSettings.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnOpenProfessionBuffsWindow)
+						.addComponent(chckbxProfessionBuffsEnabled))
+					.addContainerGap(282, Short.MAX_VALUE))
+		);
+		panelSettings.setLayout(gl_panelSettings);
+		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(tabbedPane)
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(tabbedPane)
+		);
+		frame.getContentPane().setLayout(groupLayout);
+		/* TABLE HERE */ 
 		
 		
 	}
@@ -334,9 +511,14 @@ public class MenuGUI {
 		comboBoxSpecialization.setSelectedItem(curSettings.getSpecialization());
 		comboBoxSpecialization.setModel(new DefaultComboBoxModel<String>(Constants.profSpec.get(curSettings.getProfession()).toArray(String[]::new)));
 		
+		//buffs
+		chckbxBoonsEnabled.setSelected(curSettings.getBoonSettings().getDisplay());
+		chckbxProfessionBuffsEnabled.setSelected(curSettings.getProfessionBuffsSettings().getDisplay());
+		
 		formattedTextFieldMinDuration.setValue(curSettings.getMinDuration());
 		System.out.println("Char name is now" + curSettings.getCharName());
 	}
+	
 	
 	//saves current fields to settings. 
 	private void saveTextFields() {
@@ -353,6 +535,9 @@ public class MenuGUI {
 		curSettings.setProfession(String.valueOf(comboBoxProfession.getSelectedItem()));
 		curSettings.setSpecialization(String.valueOf(comboBoxSpecialization.getSelectedItem()));
 		
+		//buffs
+		curSettings.getBoonSettings().setDisplay(chckbxBoonsEnabled.isSelected());
+		curSettings.getProfessionBuffsSettings().setDisplay(chckbxProfessionBuffsEnabled.isSelected());
 		
 		System.out.println("Char name is now" + curSettings.getCharName());
 		
@@ -392,7 +577,7 @@ public class MenuGUI {
 	            if (file.lastModified() > lastModifiedTime)
 	            {
 	            	String fileName = file.getName();
-	            	if (getFileExtension(fileName).equals("xml")) {
+	            	if (FileHelper.getFileExtension(fileName).equals("xml")) {
 	            		System.out.println("found file." + fileName);
 		    			chosenFile = file;
 		                lastModifiedTime = file.lastModified();
@@ -417,28 +602,13 @@ public class MenuGUI {
 			curSettings = mapper.readValue(inputStream, typeRef);
 			inputStream.close();
 			updateTextFields();
-			textFieldSettingsName.setText(getFileName(fileName));
+			textFieldSettingsName.setText(FileHelper.getFileName(fileName));
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 	}
-	
-	public static String getFileExtension(String fileName) {
-		int i = fileName.lastIndexOf('.');
-		int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
-		if (i > p) {
-		    return fileName.substring(i+1);
-		}
-		return "";
-	}
-	
-	public static String getFileName(String fileLoc) {
-		Path p = Paths.get(fileLoc);
-		String fileName = p.getFileName().toString();
-		int i = fileName.lastIndexOf('.'); //remove file extension.
-		
-		return fileName.substring(0, i);
-	}
+
 }
+
 
 

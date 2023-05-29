@@ -1,8 +1,8 @@
 Character Name:, Aihara Meii
-Location:, WvW - RBL
-Stats shown:, Damage
-fightName, success, durationMS, distToCom, swapCount, totalDmg, resurrects, condiCleanse, condiCleanseSelf, boonStrips, 
-Detailed WvW - Red Desert Borderlands, true, 715751, 346.50823974609375, 17, 93413, 4, 465, 213, 4, 
-Detailed WvW - Red Desert Borderlands, true, 80801, 876.7772216796875, 7, 5145, 0, 8, 28, 0, 
-Detailed WvW - Red Desert Borderlands, true, 169470, 10168.2607421875, 26, 4067, 2, 19, 50, 0, 
-Detailed WvW - Red Desert Borderlands, true, 49771, 864.355224609375, 5, 659, 0, 9, 5, 1, 
+Stats shown:, All
+general, , , , outgoingHealing, , , statsAll, , , , support, , , , , dpsAll, , , , , , , defenses, , , , , , 
+fightName, success, durationMS, , hps, healing, , distToCom, swapCount, totalDmg, , resurrects, condiCleanse, condiCleanseSelf, boonStrips, , dps, damage, condiDPS, condiDamage, powerDps, powerDamage, , damageTaken, damageBarrier, blockedCount, evadedCount, damageBarrier, , Aegis, Fury, Might, Protection, Quickness, Regeneration, Resistance, Retaliation, Stability, Swiftness, Vigor, 
+Detailed WvW - Red Desert Borderlands, true, 715751, , 3093, 2213641, , 346.50823974609375, 17, 93413, , 4, 465, 213, 4, , 131, 93413, null, 38269, 77, 55144, , 458012, 53554, 28, 94, 53554, , 0, 6.165, 0.392, 25.802, 0, 44.911, 0, 0, 0.041, 0.66, 36.483, 
+Detailed WvW - Red Desert Borderlands, true, 80801, , 2303, 186108, , 876.7772216796875, 7, 5145, , 0, 8, 28, 0, , 64, 5145, null, 0, 64, 5145, , 68616, 836, 1, 13, 836, , 0, 0, 0, 2.338, 0, 4.595, 0, 0, 0, 0, 8.501, 
+Detailed WvW - Red Desert Borderlands, true, 169470, , 2373, 402177, , 10168.2607421875, 26, 4067, , 2, 19, 50, 0, , 24, 4067, null, 759, 20, 3308, , 150577, 8516, 8, 21, 8516, , 0, 0, 0, 5.964, 0, 3.457, 0, 0, 0, 0, 3.477, 
+Detailed WvW - Red Desert Borderlands, true, 49771, , 983, 48925, , 864.355224609375, 5, 659, , 0, 9, 5, 1, , 13, 659, null, 523, 3, 136, , 12192, 3544, 2, 4, 3544, , 0, 0, 0.493, 17.083, 0, 30.75, 0, 0, 0, 0, 17.072, 

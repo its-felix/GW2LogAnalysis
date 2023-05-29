@@ -1,4 +1,3 @@
-
 public class Settings {
 	int minDuration = 0; //in seconds
 	
@@ -10,7 +9,22 @@ public class Settings {
 	String DesiredStats = "";
 	String Profession = "";
 	String Specialization ="";
+	SettingsBuffs boonSettings = new SettingsBuffs(); 
+	SettingsBuffs professionBuffsSettings = new SettingsBuffs();
+
 	
+	public SettingsBuffs getProfessionBuffsSettings() {
+		return professionBuffsSettings;
+	}
+	public void setProfessionBuffsSettings(SettingsBuffs professionBuffsSettings) {
+		this.professionBuffsSettings = professionBuffsSettings;
+	}
+	public SettingsBuffs getBoonSettings() {
+		return boonSettings;
+	}
+	public void setBoonSettings(SettingsBuffs boonSettings) {
+		this.boonSettings = boonSettings;
+	}
 	public String getProfession() {
 		return Profession;
 	}
