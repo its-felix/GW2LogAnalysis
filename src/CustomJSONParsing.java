@@ -66,17 +66,61 @@ public class CustomJSONParsing {
 			}
 			result += ", ";
 		}
-
-		//buffs: 
-		for (String str : s.getBoonSettings().getBuffs()) {
-			result += str + ", ";
-		}
-
+		String[] boons = getSettingsBuffsString(s.getBoonSettings());
+		sectioning += boons[0];
+		result += boons[1];
+		
+		
+		
 		//sectioning? spaces between different sections?
 		writeString(sectioning);
 		writeNewLine();
 		writeString(result);
 		writeNewLine();
+	}
+	
+	
+	private String[] getSettingsBuffsString(SettingsBuffs s) {
+		if (!s.getDisplay())
+			return new String[] {"",""};
+		String sectioning = "";
+		String res ="";
+		int count = s.getBuffs().size() + 1;
+
+		String buffs = s.getBuffs().toString();
+		buffs = buffs.substring(1,buffs.length()-1) + ", , ";
+		
+		
+		if (s.getPhaseDuration()) {
+			if (s.getUptime()) {
+				sectioning += "Uptime" + new String(new char[count]).replace("\0", ", ");
+				res += buffs;
+			}
+			if (s.getGenerationSelf()) {
+				sectioning += "Generation Self" + new String(new char[count]).replace("\0", ", ");
+				res += buffs;
+			}
+			if (s.getGenerationGroup()) {
+				sectioning += "Generation Group" + new String(new char[count]).replace("\0", ", ");
+				res += buffs;
+			}
+		}
+		if (s.getPhaseActiveDuration()) {
+			if (s.getUptime()) {
+				sectioning += "Active Uptime" + new String(new char[count]).replace("\0", ", ");
+				res += buffs;
+			}
+			if (s.getGenerationSelf()) {
+				sectioning += "Active Generation Self" + new String(new char[count]).replace("\0", ", ");
+				res += buffs;
+			}
+			if (s.getGenerationGroup()) {
+				sectioning += "Active Generation Group" + new String(new char[count]).replace("\0", ", ");
+				res += buffs;
+			}
+		}
+		
+		return new String[] {sectioning, res};
 	}
 
 	
@@ -101,9 +145,24 @@ public class CustomJSONParsing {
 		}
 		
 		//buffs:
-		if (s.getBoonSettings().getDisplay())
-			writeString(getStringForBuffs( (JSONArray)player.get("groupBuffsActive") , s.getBoonSettings().getBuffs() ));
-		
+		if (s.getBoonSettings().getDisplay()) {
+			if (s.getBoonSettings().getPhaseDuration()) {
+				if (s.getBoonSettings().getUptime())
+					writeString(getStringForBuffs( (JSONArray)player.get("buffUptimes") , s.getBoonSettings().getBuffs() ));
+				if (s.getBoonSettings().getGenerationSelf())
+					writeString(getStringForBuffs( (JSONArray)player.get("selfBuffs") , s.getBoonSettings().getBuffs() ));
+				if (s.getBoonSettings().getGenerationGroup())
+					writeString(getStringForBuffs( (JSONArray)player.get("groupBuffs") , s.getBoonSettings().getBuffs() ));
+			}
+			if (s.getBoonSettings().getPhaseActiveDuration()) {
+				if (s.getBoonSettings().getUptime())
+					writeString(getStringForBuffs( (JSONArray)player.get("buffUptimesActive") , s.getBoonSettings().getBuffs() ));
+				if (s.getBoonSettings().getGenerationSelf())
+					writeString(getStringForBuffs( (JSONArray)player.get("groupBuffsActive") , s.getBoonSettings().getBuffs() ));
+				if (s.getBoonSettings().getGenerationGroup())
+					writeString(getStringForBuffs( (JSONArray)player.get("groupBuffsActive") , s.getBoonSettings().getBuffs() ));
+			}
+		}
 		
 		
 		writeNewLine();
@@ -132,6 +191,8 @@ public class CustomJSONParsing {
 		for (String s : list) {
 			if (!obj.containsKey(s)) {
 				System.out.println("Error: Trying to get the key " + s + ", which is not contained in the object.");
+				result += "err, ";
+				continue;
 			}
 				
 			result += obj.get(s) + ", ";
@@ -157,14 +218,20 @@ public class CustomJSONParsing {
 			String boonName = Constants.buffs.get(id);
 			if (desired.contains(boonName)) {
 				JSONObject buffData = (JSONObject) ((JSONArray) boon.get("buffData")).get(0);
-				list.set(desired.indexOf(boonName), ((Double) buffData.get("generation")).toString() );
+				if (buffData.containsKey("generation"))
+					list.set(desired.indexOf(boonName), ((Double) buffData.get("generation")).toString() );
+				else if (buffData.containsKey("uptime")) 
+					list.set(desired.indexOf(boonName), ((Double) buffData.get("uptime")).toString() );
+				else 
+					System.out.println("Not finding a value inside of buffData?");
 			}
 		}
 		
 		for (String s : list) {
 			result += s + ", ";
 		}
-		
+		result += ", ";
+		//result = (list.toString()).substring(1,list.size()-1) + ", ";
 		
 		return result;
 	}

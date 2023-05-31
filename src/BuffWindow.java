@@ -20,11 +20,11 @@ import javax.swing.JButton;
 public class BuffWindow {
 	JFrame frame = new JFrame();
 	
-	private static JCheckBox chckbxBuffPhaseDuration;
-	private static JCheckBox chckbxBuffPhaseActiveDuration;
-	private static JCheckBox chckbxBuffUptime;
-	private static JCheckBox chckbxBuffGenerationSelf;
-	private static JCheckBox chckbxBuffGenerationGroup;
+	private JCheckBox chckbxBuffPhaseDuration;
+	private JCheckBox chckbxBuffPhaseActiveDuration;
+	private JCheckBox chckbxBuffUptime;
+	private JCheckBox chckbxBuffGenerationSelf;
+	private JCheckBox chckbxBuffGenerationGroup;
 	
 	private JTable tableBoonChecks;
 	private DataModel dataModelBoonChecks;
@@ -115,7 +115,7 @@ public class BuffWindow {
 		chckbxBuffUptime.setSelected(s.getUptime()); 
 		chckbxBuffGenerationSelf.setSelected(s.getGenerationSelf());
 		chckbxBuffGenerationGroup.setSelected(s.getGenerationGroup()); 
-		//"What is this display value?",
+		
 		dataModelBoonChecks.toggleGivenValues(s.getBuffs());
 		
 		scrollPane.setViewportView(tableBoonChecks);
@@ -142,13 +142,35 @@ public class BuffWindow {
 		dataModelBoonChecks.setDataVector(checkTableObject(list), tableChecksColumns);
 	}
 	
-	private static Object[][] checkTableObject(List<String> list) {
+	private Object[][] checkTableObject(List<String> list) {
 		Object[][] obj = new Object[list.size()][list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			obj[i] = new Object[] {list.get(i), Boolean.FALSE};
 		}
 		return obj;
 	}
+	
+	public void updateFields(SettingsBuffs s) {
+		chckbxBuffPhaseDuration.setSelected(s.getPhaseDuration());
+		chckbxBuffPhaseActiveDuration.setSelected(s.getPhaseActiveDuration());
+		chckbxBuffUptime.setSelected(s.getUptime());
+		chckbxBuffGenerationSelf.setSelected(s.getGenerationSelf());
+		chckbxBuffGenerationGroup.setSelected(s.getGenerationGroup());
+		
+		dataModelBoonChecks.toggleGivenValues(s.getBuffs());
+	}
+	public SettingsBuffs saveFields(Boolean display) {
+		System.out.println("Inside settingsbuffs: " + chckbxBuffPhaseDuration.isSelected() + ", " + chckbxBuffPhaseActiveDuration.isSelected());
+		return new SettingsBuffs(
+				chckbxBuffPhaseDuration.isSelected(),
+				chckbxBuffPhaseActiveDuration.isSelected(),
+				chckbxBuffUptime.isSelected(),
+				chckbxBuffGenerationSelf.isSelected(),
+				chckbxBuffGenerationGroup.isSelected(),
+				display,
+				dataModelBoonChecks.getSelectedValues());
+	}
+	
 	
 	private class DataModel extends DefaultTableModel {
 		//original, one check mark active code is from https://stackoverflow.com/questions/7920068/using-setvalueat-to-recreate-mutually-exclusive-check-boxes/7920159#7920159

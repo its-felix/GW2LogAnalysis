@@ -3,16 +3,51 @@ public class Settings {
 	
 	String CharName = "";
 	String InputFile = "";
-	String OutputFileName = "";
+	String OutputFileName = "LogAnalysisOutput";
 	String OutputFile = "";
-	String Location = "";
-	String DesiredStats = "";
-	String Profession = "";
-	String Specialization ="";
+	String Location = "Any";
+	String DesiredStats = "All";
+	String Profession = "Any";
+	String Specialization ="Any";
 	SettingsBuffs boonSettings = new SettingsBuffs(); 
 	SettingsBuffs professionBuffsSettings = new SettingsBuffs();
+	String WepSet1MainHand="Any";
+	String WepSet1Offhand="Any";
+	String WepSet2MainHand="Any";
+	String WepSet2Offhand="Any";
+	Boolean WepFilterStrict = false;
 
 	
+	public Boolean getWepFilterStrict() {
+		return WepFilterStrict;
+	}
+	public void setWepFilterStrict(Boolean wepFilterStrict) {
+		WepFilterStrict = wepFilterStrict;
+	}
+	public String getWepSet1MainHand() {
+		return WepSet1MainHand;
+	}
+	public void setWepSet1MainHand(String wepSet1MainHand) {
+		WepSet1MainHand = wepSet1MainHand;
+	}
+	public String getWepSet1Offhand() {
+		return WepSet1Offhand;
+	}
+	public void setWepSet1Offhand(String wepSet1Offhand) {
+		WepSet1Offhand = wepSet1Offhand;
+	}
+	public String getWepSet2MainHand() {
+		return WepSet2MainHand;
+	}
+	public void setWepSet2MainHand(String wepSet2MainHand) {
+		WepSet2MainHand = wepSet2MainHand;
+	}
+	public String getWepSet2Offhand() {
+		return WepSet2Offhand;
+	}
+	public void setWepSet2Offhand(String wepSet2Offhand) {
+		WepSet2Offhand = wepSet2Offhand;
+	}
 	public SettingsBuffs getProfessionBuffsSettings() {
 		return professionBuffsSettings;
 	}

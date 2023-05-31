@@ -2,6 +2,7 @@ import java.io.File;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -101,8 +102,23 @@ public class Analysis {
 				return false;
 			}
 		}
+		//Weapons check:
+		List<String> objWeapons = (List<String>) obj.get("weapons");
+		System.out.println("objWeapons is: " + objWeapons);
+		if (!weaponFoundCheck(String.valueOf(objWeapons.get(0)), curSettings.getWepSet1MainHand()) ||
+			!weaponFoundCheck(String.valueOf(objWeapons.get(1)), curSettings.getWepSet1Offhand()) ||
+			!weaponFoundCheck(String.valueOf(objWeapons.get(2)), curSettings.getWepSet2MainHand()) ||
+			!weaponFoundCheck(String.valueOf(objWeapons.get(3)), curSettings.getWepSet2Offhand())) 
+			return false;
 		
-		
+		return true;
+	}
+	
+	private static Boolean weaponFoundCheck(String objWeapon, String weapon) {
+		if (!weapon.equals("Any") && !objWeapon.equals(weapon)) {
+			if ( !((objWeapon.equals("Unknown")) && !curSettings.getWepFilterStrict()) ) //~("unknown" && ~S)
+				return false;
+		}
 		return true;
 	}
 }

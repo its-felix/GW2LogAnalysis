@@ -24,9 +24,12 @@ public final class Constants {
 		put("support", Arrays.asList("resurrects", "condiCleanse", "condiCleanseSelf", "boonStrips"));
 		put("outgoingHealing", Arrays.asList("hps", "healing")); //array object one. outgoingHelaing is inside extHealingStats. 
 		//Damage:
-		put("dpsAll", Arrays.asList("dps", "damage", "condiDPS", "condiDamage", "powerDps", "powerDamage"));
+		put("dpsAll", Arrays.asList("dps", "damage", "condiDps", "condiDamage", "powerDps", "powerDamage"));
 		
 	}};
+	
+	public static List<String> WEAPONS = Arrays.asList("Any","Axe","Dagger","Mace","Pistol","Sword","Scepter","Focus","Shield","Torch","Warhorn","Greatsword","Hammer",
+			"Longbow","Rifle","Short bow","Staff"/* aquatic weapons,"Harpoon gun","Spear","Trident"*/);
 	
 	//Professions and specializations:
 	public static Map<String, List<String>> profSpec = new HashMap<String, List<String>>() {{
@@ -70,6 +73,7 @@ public final class Constants {
 		put(1122, "Stability");
 		put(719, "Swiftness");
 		put(726, "Vigor");
+		put(30328,"Alacrity");
 		
 			//Auras
 		put(10332, "Chaos armor Aura");
@@ -114,6 +118,13 @@ public final class Constants {
 		put(26854,"Assassin's Presence");
 		put(26646,"Battle Scars");
 		
+		//Mesmer
+		put(10243,"Distortion");
+		put(21751,"Signet of the Ether");
+		put(10335,"Blur");
+		put(30426,"Fencer's Finesse");
+		put(44691,"Phantasmal Force");
+		
 		//Elementalist
 		put(5575, "Air Att.");
 		put(5585, "Fire Att.");
@@ -125,6 +136,38 @@ public final class Constants {
 		put(15788, "Earth Shield");
 		put(15791, "Lightnight Hammer");
 		put(15790, "Ice Bow");
+		
+		//Guardian
+		put(9114,"Justice");
+		put(9119,"Resolve");
+		put(9113,"Courage");
+		put(29632,"Spear of Justice");
+		put(30308,"Wings of Resolve");
+		put(29523,"Shield Courage");
+		put(9103,"Zealot's Flame");
+		
+		//Engineer
+		put(38333,"Pinpoint Distribution");
+		
+		//Necromancer
+		put(30285,"Vampiric Aura");
+		put(29446,"Reaper's Shroud");
+		put(790,"Deth Shroud");
+		put(30129,"Infusing Terror");
+		
+		//Ranger
+		put(31803,"Glyph of Empowerment");
+		put(14055,"Spotter");
+		put(34062,"Grace of the Land");
+		put(30449,"Natural Healing");
+		put(31508,"Celestial Avatar");
+		put(31584,"Ancestral Grace");
+		put(12549,"Storm Spirit");
+		put(12544,"Frost Spirit");
+		put(1254,"Sun Spirit");
+		put(12547,"Stone Spirit");
+		
+		
 		
 		
 	}};
