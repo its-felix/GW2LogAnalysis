@@ -1,49 +1,59 @@
-Project Description:
-Collect data from all JSON files in a folder, grab the data you have selected from the settings tab, sort and output the information into a csv file for excel. 
-Resources used:
-•	Eclipse IDE (for Java) 
-•	Jackson Library (for xml): 
-o	Jar files: https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml/2.9.7
-o	Javadocs: https://www.javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/2.9.7/index.html 
-•	Simple JSON:
-•	Swing (for GUI)
- 
-Action Items:
-•	Phase one: Initialization
-	o	Customize GUI to allow for all the following via main menu settings. 
-	o	Settings, simple exclusion filters (Name, duration, and location. Any information that can easily be accessed before gathering all the tables.) 
-	o	Xml settings import and export into/from a simple class. 
-	o	JSON Read files in selected forlder, using simple exclusion filter. 
-	o	Export csv file with the JSON information. Just put relevent settings up top and then all of the found JSON info in columns below. 
-•	Phase Two: Core
-	o	GUI to allow for following features. Going into the settings tab for some of them.  
-	o	Create display filters. Could use lists to show what output sections (object) should be displayed. (e.g. “Healing” would exclude damage.)
-		Get the base in for boons, but only allow “no boons” or “all boons”? This should be a list of checkable boons, with “(un)select all” and a selection option for different boon settings (active phase, all, etc.) 
-		Get the base for different features, such as consumable in to a selectable table.  Also a list of checkable options. No need to get far or find all values. 
-	o	Export csv with spaces between “Areas” (general, damage, heals, boons, conditions, etc.) 
-•	Phase Three: Features
-	o	GUI to allow for the following features. 
-	o	Further all filters: 
-		Boon table needs to be able to select specific boons. 
-		Finish the selection for different features, such as consumables. 
-		Add in selection for class specific stats. Everything avaiable in Arc DPS’s boon table should be available for selection. 
-	o	Add further exclusion filtering (weapon selecitons, Profession, percent alive. Etc.) 
-	o	Selecting a Directory for JSON reading should count the number of files available for reading?
-	o	Add a loading bar while reading files. 
-	o	Persist settings on close: Save and load previously used settings when closing and loading the application. 
-•	Phase Four: Expand
-	o	Expand options for Strikes, raids, and other environments. I do not currently know all of the changes that would be made, but there are many examples to read from. 
-	o	Expand the output options as well. 
-•	Phase Five: Finalize
-	o	Time and optimize running. 
-	o	Simplify for building. 
-	o	Create readme highlighting utility and use. 
-•	Phase Six: Build and deploy. 
+# GW2LogAnalysis
+
+## Summary:
+Application to create tables with any desired data from ArcDPS logs, with complex filtering. The application will organize your desired stats into both csv, a default spreadsheet model, or into a .xlsx spreadsheet with tables, average formulas, and sorting already created for Excel. Integration of your copy of Elite Insights allows parsing directly from ArcDPS’s original .zevtc files and embedded html files into the tables.  
 
 
-OUTPUT:
-The output will be formatted for excel csv. Basically, a comma between each column. To move down a row use a new line, or “\n”. More details found at https://www.spreadsheetsmadeeasy.com/understanding-csv-files-in-excel/ 
-Basic details and room for comments will be left at the top of the spreadsheet, then the format for a table will be inserted, the the headers stating the information below it. It may end up being a wide table, or long if many options or logs are parsed. To help this, we could use a spacing between different sections on the x axis (still have the same information in the row), between general, dps, healing, and boons. This will make the format more readable. 
-Settings chosen by the user may be saved or loaded via xml file. By using the Jackson library, we are able to easily read from or fill a class object that stores the settings. 
+## OUTPUT:
+Two spreadsheet formats will be created, .csv and .xlsx, with content based on your user settings. The .xlsx file is an Excel spreadsheet document that is already formatted with sortable tables and averaging formulas, .csv has been left as an output in case users are missing Excel, but is merely a comma separated document. 
+
+### Features
+- Integrates Elite Insights to parse directly from .zevtc files. _Must have Elite Insights downloaded locally._
+- The table can be sorted by any column, reordering each row accordingly. 
+- Average formulas included at the bottom of each column. Click on the excel formula to easily change to another formula function, such as "min", "max", etc.
+- HTML links can be embedded into the excel file to show the full report. 
+
+### Filtering
+Many filtering features have already been added, more will likely come as different needs arise. Some filtering examples include: Percentage of Time Alive, Distance to Commander, Duration, Weapon filters, Location/Game Mode/Encounters, Specialization, and more. 
+
+### Example
+The Excel document output will look similar to the following image: 
+![Example Excel document](./resources/LogAnalysisExcelexample.png)
+  
+
+## Use/Instructions
+### general Use
+- By hovering over text/fields, tool tips will show up giving additional details on the fields functionallity. 
+- There are few fields that are required to run the program, if they are not filled out, a window will pop up informing you of the missing field. 
+- If a log fails to pass filtering options, the filter that the log failed to pass will be displayed in the parsing window. 
+
+### Additional Info
+- Elite Insight (EI) linking: By checking the "Parse from .zevtc" option, on the home screen, additional options will show up to set up the parsing. You must have the Elite Insights Parser downloaded locally, you can do so [HERE](https://github.com/baaron4/GW2-Elite-Insights-Parser). Once installed and unzipped, navigate to and select the EI application file (.exe) through the GW2 Log Analysis application, using the "Elite Insights Directory" button. 
+- HTML Embedding: Embedding html will create a click-able link, opening a page in your default browser that looks similar to a log show on dps.repot. Embedding html can greatly increase the size of your excel file and the time it takes to parse logs.
+- Filter dates by log: This is a filtering option available in the "Advanced Filtering" tab. By default this is disabled and the parser will filter logs based on the time stamp on the file. By enabling this, the parser will filter log dates based on the information inside the log, meaning every single log will be parsed -even if it is to be rejected. Enabling this option can greatly increase parsing time, depending on use case. 
 
 
+## Resources
+### Feedback, suggestions, bug reports
+#### discord channel
+If you'd like to leave feedback, suggestions, or report a bug, join the Discord server and let us know. [Link here.](https://discord.gg/3qMMDJ2rm2)
+
+#### Upcoming improvements:
+This project is still in development stage. The main goal was to pull all the necessary information out of log files to generate comparisons between builds. With this in mind, there are many features that should still be implemented. However, looking at the community of Guild Wars, there are many other use cases that this project could expand to. The goals currently set are: 
+- Finish listing all the buff skills available. Currently, some of the most prominent skill effects are listed, but there are many more and some that should be read as percentages aren't yet.  
+- Implementing an "update" button, connected to the Github release page. 
+- Incoming/outgoing damage. This is a tricky one to implement, while maintaining legibility. Current ideas are 
+    - Top damage skills.
+    - Selecting skills.
+    - Embedded table with the same format as dps.report.
+- Ability to generate charts into output.  
+
+### Resources Used/referenced:
+Many thanks to the people that created the resources that make this project work! Guild Wars is an ever growing community that so many people have poured love into. It is a beautiful thing. (_While this project is drawn from and utilizes many of the resources listed here, the listed resources/creators do not have any association with this project and are not responsible for its functionality nor use._)
+- [Elite Insights](https://github.com/baaron4/GW2-Elite-Insights-Parser/tree/master)
+	- [Elite Insight JSON documentation](https://baaron4.github.io/GW2-Elite-Insights-Parser/Json/index.html)
+- Eclipse IDE/Java
+- Jackson Library (For xml files)
+- Simple JSON (JSON file reading)
+- Apache POI (For excel/.xlsx file generation) 
+- Swing (GUI)
