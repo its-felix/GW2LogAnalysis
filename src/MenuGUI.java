@@ -46,17 +46,12 @@ import settings.XMLHelper;
  * -Properties files are quite a mess. It's great for a huge list to match an id, but perhaps not use cases such as profession buffs --where the output changes a lot. 
  * 		-Figure out a better way to handle profession buffs, or finish input each and every profession effect into the list.
  * 		-Effects that require percentages could be handled better? Perhaps use a table for values that don't have percentages, since most do?  
- * 
- * 
- * 2. Find a way to insert the URL links too. One way would to to check the source file for files with the same name, but using the "url" extension. May need to do an api call...
- * 		-Get url option? Currently, there is no need for API calls. Everything is being handled internally, is there a need for url? 
+
  * - description to stats inside the "StatsWindow" gui element would be very nice, but would require modification of the DataModel/DefaultTableDataModel. So, perhaps we'll come back to that. 
- *  
- *
- * 
  * -try catch for the resources options. 
  * - show how many files there are to run based on your filters.. I thought I already did that, but... 
- * 
+ * - add "Any" to the specializations field, this will require adding the same into the JSONParsing general section. Some users may play the same profession on different characters.
+ * - Check the influence of ArcDPS addons, such as healing stats. This could cause some bugs. 
  * 
  * Bugs:
  * 

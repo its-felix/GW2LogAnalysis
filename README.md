@@ -1,4 +1,6 @@
 # GW2LogAnalysis
+## Contact 
+If you'd like to leave feedback, suggestions, or report a bug, reach out on the Discord server: [Link here.](https://discord.gg/3qMMDJ2rm2)
 
 ## Summary:
 Application to create tables with any desired data from ArcDPS logs, with complex filtering. The application will organize your desired stats into both csv, a default spreadsheet model, or into a .xlsx spreadsheet with tables, average formulas, and sorting already created for Excel. Integration of your copy of Elite Insights allows parsing directly from ArcDPS’s original .zevtc files and embedded html files into the tables.  
@@ -16,6 +18,11 @@ Two spreadsheet formats will be created, .csv and .xlsx, with content based on y
 ### Filtering
 Many filtering features have already been added, more will likely come as different needs arise. Some filtering examples include: Percentage of Time Alive, Distance to Commander, Duration, Weapon filters, Location/Game Mode/Encounters, Specialization, and more. 
 
+### Menu GUI
+The menu for the program, as of v0.9:
+
+![Menu image](./resources/LogAnalysisMenu.png)
+
 ### Example
 The Excel document output will look similar to the following image: 
 ![Example Excel document](./resources/LogAnalysisExcelexample.png)
@@ -23,7 +30,7 @@ The Excel document output will look similar to the following image:
 
 ## Use/Instructions
 ### general Use
-- By hovering over text/fields, tool tips will show up giving additional details on the fields functionallity. 
+- By hovering over text/fields, tool tips will show up giving additional details on the fields functionality. 
 - There are few fields that are required to run the program, if they are not filled out, a window will pop up informing you of the missing field. 
 - If a log fails to pass filtering options, the filter that the log failed to pass will be displayed in the parsing window. 
 
@@ -35,7 +42,6 @@ The Excel document output will look similar to the following image:
 
 ## Resources
 ### Feedback, suggestions, bug reports
-#### discord channel
 If you'd like to leave feedback, suggestions, or report a bug, join the Discord server and let us know. [Link here.](https://discord.gg/3qMMDJ2rm2)
 
 #### Upcoming improvements:
@@ -43,10 +49,18 @@ This project is still in development stage. The main goal was to pull all the ne
 - Finish listing all the buff skills available. Currently, some of the most prominent skill effects are listed, but there are many more and some that should be read as percentages aren't yet.  
 - Implementing an "update" button, connected to the Github release page. 
 - Incoming/outgoing damage. This is a tricky one to implement, while maintaining legibility. Current ideas are 
-    - Top damage skills.
-    - Selecting skills.
+    - Top damage skills and their percent/total damage.
+    - Allowing selection of skills to display percent and total.
     - Embedded table with the same format as dps.report.
-- Ability to generate charts into output.  
+- Ability to generate charts into output. 
+- Fix html embedded object so they do not resize upon use.
+
+##### Questionable Ideas
+- Integrate dps.report url links, instead of embedded html. The difficulties are that the program currently doesn't require any connection and this will create a LOT of calls to dps.report, which may not be very polite to their servers.
+- File management (is this a desired feature?)
+	- Ability to zip used log/generated files next to output
+- Ability to generate multiple tables/sheets in excel, either adding onto previous sheets or having multiple "runs" (for lack of a better term). With the current idea of comparison, one would need to copy and paste the output from multiple program runs.
+	
 
 ### Resources Used/referenced:
 Many thanks to the people that created the resources that make this project work! Guild Wars is an ever growing community that so many people have poured love into. It is a beautiful thing. (_While this project is drawn from and utilizes many of the resources listed here, the listed resources/creators do not have any association with this project and are not responsible for its functionality nor use._)
