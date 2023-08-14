@@ -6,269 +6,290 @@ import java.sql.Date;
 import java.util.List;
 
 public class Settings {
-	//Main menu filters and main.java.com.bloodybade4.gw2loganalysis.settings
-	int minDuration = 0; //in seconds
-	String SettingsName = "Settings01";
-	String CharName = null;
-	String Location = "Any";
-	Integer EncounterID = 0;
-	String Profession = "Any";
-	String Specialization ="Any";
-	
-	//Profession buff main.java.com.bloodybade4.gw2loganalysis.settings, changes when the player select a new profession.
-	SettingsBuff professionBuffsSettings = new SettingsBuff(true, true, true, null, null, null, "Profession Buffs", "personalBuffs",
-			Constants.generateBuffListWithFilter(System.getProperty("user.dir") +"\\src\\resources\\constProfessionBuffIDs.properties", ""));
-	//Buff main.java.com.bloodybade4.gw2loganalysis.settings
-	List<SettingsBuff> buffsList = Constants.buffsCategoriesGenerateDefaults();
-	//Stats main.java.com.bloodybade4.gw2loganalysis.settings, for many types of categories
-	List<SettingsCategories> categories = Constants.categoriesGenerateDefaults();
-	Boolean effectsEnabled = true;
-	
-	
-	
-	//Settings and file configuration
-	String InputFile = ""; //The folder holding all the files to analyze. 
-	String OutputFileName = "LogAnalysisOutput"; //The name for the output file. 
-	String OutputFile = "";	//The path for the output file. 
-	String EIAbsPath = "";	//The absolute path to Elite insights (EI). 
-	Boolean UseEI = false;
-	Boolean embbedHTML = false; //Will have EI generate HTML, if running, and will search for and embed HTML inside the excel file. 
-	Boolean saveJSON = false;	// (ONLY works if "UseEI" is true). if True, will not delete the JSON files after the program ends
-	
-	
-	
-	
-	//Used in time checks. 
-	Boolean datesByLog = false; //If true, will check inside JSON for date range. Otherwise, use file modified timestamp. 
-	Date fromDate = null;
-	Date toDate = null;	
-	
-	//Advanced filtering tab
-	Integer minComDistance = 0;
-	Integer minSquadSize = 0;
-	Integer minPercentTimeAlive = 0; 
-	String WepSet1MainHand="Any";
-	String WepSet1Offhand="Any";
-	String WepSet2MainHand="Any";
-	String WepSet2Offhand="Any";
-	Boolean WepFilterStrict = false;
-	
-	
-	
-	
-	public Integer getMinPercentTimeAlive() {
-		return minPercentTimeAlive;
-	}
+    //Main menu filters and main.java.com.bloodybade4.gw2loganalysis.settings
+    int minDuration = 0; //in seconds
+    String SettingsName = "Settings01";
+    String CharName = null;
+    String Location = "Any";
+    Integer EncounterID = 0;
+    String Profession = "Any";
+    String Specialization = "Any";
 
-	public void setMinPercentTimeAlive(Integer minPercentTimeAlive) {
-		this.minPercentTimeAlive = minPercentTimeAlive;
-	}
+    //Profession buff main.java.com.bloodybade4.gw2loganalysis.settings, changes when the player select a new profession.
+    SettingsBuff professionBuffsSettings = new SettingsBuff(true, true, true, null, null, null, "Profession Buffs", "personalBuffs",
+            Constants.generateBuffListWithFilter(System.getProperty("user.dir") + "\\src\\resources\\constProfessionBuffIDs.properties", ""));
+    //Buff main.java.com.bloodybade4.gw2loganalysis.settings
+    List<SettingsBuff> buffsList = Constants.buffsCategoriesGenerateDefaults();
+    //Stats main.java.com.bloodybade4.gw2loganalysis.settings, for many types of categories
+    List<SettingsCategories> categories = Constants.categoriesGenerateDefaults();
+    Boolean effectsEnabled = true;
 
-	public Boolean getDatesByLog() {
-		return datesByLog;
-	}
 
-	public void setDatesByLog(Boolean datesByLog) {
-		this.datesByLog = datesByLog;
-	}
+    //Settings and file configuration
+    String InputFile = ""; //The folder holding all the files to analyze.
+    String OutputFileName = "LogAnalysisOutput"; //The name for the output file.
+    String OutputFile = "";    //The path for the output file.
+    String EIAbsPath = "";    //The absolute path to Elite insights (EI).
+    Boolean UseEI = false;
+    Boolean embbedHTML = false; //Will have EI generate HTML, if running, and will search for and embed HTML inside the excel file.
+    Boolean saveJSON = false;    // (ONLY works if "UseEI" is true). if True, will not delete the JSON files after the program ends
 
-	public Boolean getSaveJSON() {
-		return saveJSON;
-	}
 
-	public void setSaveJSON(Boolean saveJSON) {
-		this.saveJSON = saveJSON;
-	}
+    //Used in time checks.
+    Boolean datesByLog = false; //If true, will check inside JSON for date range. Otherwise, use file modified timestamp.
+    Date fromDate = null;
+    Date toDate = null;
 
-	public Boolean getEmbbedHTML() {
-		return embbedHTML;
-	}
+    //Advanced filtering tab
+    Integer minComDistance = 0;
+    Integer minSquadSize = 0;
+    Integer minPercentTimeAlive = 0;
+    String WepSet1MainHand = "Any";
+    String WepSet1Offhand = "Any";
+    String WepSet2MainHand = "Any";
+    String WepSet2Offhand = "Any";
+    Boolean WepFilterStrict = false;
 
-	public void setEmbbedHTML(Boolean embbedHTML) {
-		this.embbedHTML = embbedHTML;
-	}
 
-	public String getEIAbsPath() {
-		return EIAbsPath;
-	}
+    public Integer getMinPercentTimeAlive() {
+        return minPercentTimeAlive;
+    }
 
-	public void setEIAbsPath(String eIAbsPath) {
-		this.EIAbsPath = eIAbsPath;
-	}
+    public void setMinPercentTimeAlive(Integer minPercentTimeAlive) {
+        this.minPercentTimeAlive = minPercentTimeAlive;
+    }
 
-	public Boolean getUseEI() {
-		return UseEI;
-	}
+    public Boolean getDatesByLog() {
+        return datesByLog;
+    }
 
-	public void setUseEI(Boolean useEI) {
-		UseEI = useEI;
-	}
+    public void setDatesByLog(Boolean datesByLog) {
+        this.datesByLog = datesByLog;
+    }
 
-	public Integer getMinComDistance() {
-		return minComDistance;
-	}
+    public Boolean getSaveJSON() {
+        return saveJSON;
+    }
 
-	public void setMinComDistance(Integer minComDistance) {
-		this.minComDistance = minComDistance;
-	}
+    public void setSaveJSON(Boolean saveJSON) {
+        this.saveJSON = saveJSON;
+    }
 
-	public Integer getMinSquadSize() {
-		return minSquadSize;
-	}
+    public Boolean getEmbbedHTML() {
+        return embbedHTML;
+    }
 
-	public void setMinSquadSize(Integer minSquadSize) {
-		this.minSquadSize = minSquadSize;
-	}
+    public void setEmbbedHTML(Boolean embbedHTML) {
+        this.embbedHTML = embbedHTML;
+    }
 
-	public Integer getEncounterID() {
-		return EncounterID;
-	}
+    public String getEIAbsPath() {
+        return EIAbsPath;
+    }
 
-	public void setEncounterID(Integer encounterID) {
-		EncounterID = encounterID;
-	}
+    public void setEIAbsPath(String eIAbsPath) {
+        this.EIAbsPath = eIAbsPath;
+    }
 
-	public String getSettingsName() {
-		return SettingsName;
-	}
+    public Boolean getUseEI() {
+        return UseEI;
+    }
 
-	public void setSettingsName(String settingsName) {
-		SettingsName = settingsName;
-	}
+    public void setUseEI(Boolean useEI) {
+        UseEI = useEI;
+    }
 
-	public List<SettingsBuff> getBuffsList() {
-		return buffsList;
-	}
+    public Integer getMinComDistance() {
+        return minComDistance;
+    }
 
-	public void setBuffsList(List<SettingsBuff> buffsList) {
-		this.buffsList = buffsList;
-	}
+    public void setMinComDistance(Integer minComDistance) {
+        this.minComDistance = minComDistance;
+    }
 
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
+    public Integer getMinSquadSize() {
+        return minSquadSize;
+    }
 
-	public void setToDate(Date toDate) {
-		this.toDate = toDate;
-	}
+    public void setMinSquadSize(Integer minSquadSize) {
+        this.minSquadSize = minSquadSize;
+    }
 
-	public Date getFromDate() {
-		return fromDate;
-	}
+    public Integer getEncounterID() {
+        return EncounterID;
+    }
 
-	public void setFromDate(int year, int month, int day) {
-		Date newFromDate = new Date(year-1900, month, day);
-		this.fromDate = newFromDate;
-	}
+    public void setEncounterID(Integer encounterID) {
+        EncounterID = encounterID;
+    }
 
-	public Date getToDate() {
-		return toDate;
-	}
+    public String getSettingsName() {
+        return SettingsName;
+    }
 
-	public void setToDate(int year, int month, int day) {
-		Date newToDate = new Date(year-1900, month, day);
-		this.toDate = newToDate;
-	}
+    public void setSettingsName(String settingsName) {
+        SettingsName = settingsName;
+    }
 
-	public Boolean getEffectsEnabled() {
-		return effectsEnabled;
-	}
+    public List<SettingsBuff> getBuffsList() {
+        return buffsList;
+    }
 
-	public void setEffectsEnabled(Boolean effectsEnabled) {
-		this.effectsEnabled = effectsEnabled;
-	}
+    public void setBuffsList(List<SettingsBuff> buffsList) {
+        this.buffsList = buffsList;
+    }
 
-	public List<SettingsCategories> getCategories() {
-		return this.categories;
-	}
-	
-	public void setCategories(List<SettingsCategories> newCategories) {
-		this.categories = newCategories;
-	}
-	
-	public Boolean getWepFilterStrict() {
-		return this.WepFilterStrict;
-	}
-	public void setWepFilterStrict(Boolean wepFilterStrict) {
-		this.WepFilterStrict = wepFilterStrict;
-	}
-	public String getWepSet1MainHand() {
-		return this.WepSet1MainHand;
-	}
-	public void setWepSet1MainHand(String wepSet1MainHand) {
-		this.WepSet1MainHand = wepSet1MainHand;
-	}
-	public String getWepSet1Offhand() {
-		return this.WepSet1Offhand;
-	}
-	public void setWepSet1Offhand(String wepSet1Offhand) {
-		this.WepSet1Offhand = wepSet1Offhand;
-	}
-	public String getWepSet2MainHand() {
-		return this.WepSet2MainHand;
-	}
-	public void setWepSet2MainHand(String wepSet2MainHand) {
-		this.WepSet2MainHand = wepSet2MainHand;
-	}
-	public String getWepSet2Offhand() {
-		return this.WepSet2Offhand;
-	}
-	public void setWepSet2Offhand(String wepSet2Offhand) {
-		this.WepSet2Offhand = wepSet2Offhand;
-	}
-	public SettingsBuff getProfessionBuffsSettings() {
-		return this.professionBuffsSettings;
-	}
-	public void setProfessionBuffsSettings(SettingsBuff professionBuffsSettings) {
-		this.professionBuffsSettings = professionBuffsSettings;
-	}
-	public String getProfession() {
-		return this.Profession;
-	}
-	public void setProfession(String profession) {
-		this.Profession = profession;
-	}
-	public String getSpecialization() {
-		return this.Specialization;
-	}
-	public void setSpecialization(String specialization) {
-		this.Specialization = specialization;
-	}
-	
-	public String getLocation() {
-		return this.Location;
-	}
-	public void setLocation(String location) {
-		this.Location = location;
-	}
-	public int getMinDuration() {
-		return this.minDuration;
-	}
-	public void setMinDuration(int minDuration) {
-		this.minDuration = minDuration;
-	}
-	public String getCharName() {
-		return this.CharName;
-	}
-	public void setCharName(String charName) {
-		this.CharName = charName;
-	}
-	public String getInputFile() {
-		return this.InputFile;
-	}
-	public void setInputFile(String inputFile) {
-		this.InputFile = inputFile;
-	}
-	public String getOutputFileName() {
-		return this.OutputFileName;
-	}
-	public void setOutputFileName(String outputFileName) {
-		this.OutputFileName = outputFileName;
-	}
-	public String getOutputFile() {
-		return this.OutputFile;
-	}
-	public void setOutputFile(String outputFile) {
-		this.OutputFile = outputFile;
-	}
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public void setFromDate(int year, int month, int day) {
+        Date newFromDate = new Date(year - 1900, month, day);
+        this.fromDate = newFromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
+
+    public void setToDate(int year, int month, int day) {
+        Date newToDate = new Date(year - 1900, month, day);
+        this.toDate = newToDate;
+    }
+
+    public Boolean getEffectsEnabled() {
+        return effectsEnabled;
+    }
+
+    public void setEffectsEnabled(Boolean effectsEnabled) {
+        this.effectsEnabled = effectsEnabled;
+    }
+
+    public List<SettingsCategories> getCategories() {
+        return this.categories;
+    }
+
+    public void setCategories(List<SettingsCategories> newCategories) {
+        this.categories = newCategories;
+    }
+
+    public Boolean getWepFilterStrict() {
+        return this.WepFilterStrict;
+    }
+
+    public void setWepFilterStrict(Boolean wepFilterStrict) {
+        this.WepFilterStrict = wepFilterStrict;
+    }
+
+    public String getWepSet1MainHand() {
+        return this.WepSet1MainHand;
+    }
+
+    public void setWepSet1MainHand(String wepSet1MainHand) {
+        this.WepSet1MainHand = wepSet1MainHand;
+    }
+
+    public String getWepSet1Offhand() {
+        return this.WepSet1Offhand;
+    }
+
+    public void setWepSet1Offhand(String wepSet1Offhand) {
+        this.WepSet1Offhand = wepSet1Offhand;
+    }
+
+    public String getWepSet2MainHand() {
+        return this.WepSet2MainHand;
+    }
+
+    public void setWepSet2MainHand(String wepSet2MainHand) {
+        this.WepSet2MainHand = wepSet2MainHand;
+    }
+
+    public String getWepSet2Offhand() {
+        return this.WepSet2Offhand;
+    }
+
+    public void setWepSet2Offhand(String wepSet2Offhand) {
+        this.WepSet2Offhand = wepSet2Offhand;
+    }
+
+    public SettingsBuff getProfessionBuffsSettings() {
+        return this.professionBuffsSettings;
+    }
+
+    public void setProfessionBuffsSettings(SettingsBuff professionBuffsSettings) {
+        this.professionBuffsSettings = professionBuffsSettings;
+    }
+
+    public String getProfession() {
+        return this.Profession;
+    }
+
+    public void setProfession(String profession) {
+        this.Profession = profession;
+    }
+
+    public String getSpecialization() {
+        return this.Specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.Specialization = specialization;
+    }
+
+    public String getLocation() {
+        return this.Location;
+    }
+
+    public void setLocation(String location) {
+        this.Location = location;
+    }
+
+    public int getMinDuration() {
+        return this.minDuration;
+    }
+
+    public void setMinDuration(int minDuration) {
+        this.minDuration = minDuration;
+    }
+
+    public String getCharName() {
+        return this.CharName;
+    }
+
+    public void setCharName(String charName) {
+        this.CharName = charName;
+    }
+
+    public String getInputFile() {
+        return this.InputFile;
+    }
+
+    public void setInputFile(String inputFile) {
+        this.InputFile = inputFile;
+    }
+
+    public String getOutputFileName() {
+        return this.OutputFileName;
+    }
+
+    public void setOutputFileName(String outputFileName) {
+        this.OutputFileName = outputFileName;
+    }
+
+    public String getOutputFile() {
+        return this.OutputFile;
+    }
+
+    public void setOutputFile(String outputFile) {
+        this.OutputFile = outputFile;
+    }
 }
