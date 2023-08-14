@@ -7,7 +7,7 @@ Application to create tables with any desired data from ArcDPS logs, with comple
 
 
 ## OUTPUT:
-Two spreadsheet formats will be created, .csv and .xlsx, with content based on your user settings. The .xlsx file is an Excel spreadsheet document that is already formatted with sortable tables and averaging formulas, .csv has been left as an output in case users are missing Excel, but is merely a comma separated document. 
+Two spreadsheet formats will be created, .csv and .xlsx, with content based on your user main.java.com.bloodybade4.gw2loganalysis.settings. The .xlsx file is an Excel spreadsheet document that is already formatted with sortable tables and averaging formulas, .csv has been left as an output in case users are missing Excel, but is merely a comma separated document. 
 
 ### Features
 - Integrates Elite Insights to parse directly from .zevtc files. _Must have Elite Insights downloaded locally._
@@ -37,7 +37,7 @@ Go to the Release section and download the latest jar file (An executable Java f
 - If a log fails to pass filtering options, the filter that the log failed to pass will be displayed in the parsing window. 
 
 ### Additional Info
-- Elite Insight (EI) linking: By checking the "Parse from .zevtc" option, on the home screen, additional options will show up to set up the parsing. You must have the Elite Insights Parser downloaded locally, you can do so [HERE](https://github.com/baaron4/GW2-Elite-Insights-Parser). Once installed and unzipped, navigate to and select the EI application file (.exe) through the GW2 Log Analysis application, using the "Elite Insights Directory" button. 
+- Elite Insight (EI) linking: By checking the "Parse from .zevtc" option, on the home screen, additional options will show up to set up the parsing. You must have the Elite Insights Parser downloaded locally, you can do so [HERE](https://github.com/baaron4/GW2-Elite-Insights-Parser). Once installed and unzipped, navigate to and select the EI application file (.exe) through the GW2 Log com.bloodyblade4.gw2loganalysis.Analysis application, using the "Elite Insights Directory" button. 
 - HTML Embedding: Embedding html will create a click-able link, opening a page in your default browser that looks similar to a log show on dps.repot. Embedding html can greatly increase the size of your excel file and the time it takes to parse logs.
 - Filter dates by log: This is a filtering option available in the "Advanced Filtering" tab. By default this is disabled and the parser will filter logs based on the time stamp on the file. By enabling this, the parser will filter log dates based on the information inside the log, meaning every single log will be parsed -even if it is to be rejected. Enabling this option can greatly increase parsing time, depending on use case. 
 
