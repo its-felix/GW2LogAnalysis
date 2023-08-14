@@ -29,6 +29,8 @@ The Excel document output will look similar to the following image:
   
 
 ## Use/Instructions
+Go to the Release section and download the latest jar file (An executable Java file).
+
 ### general Use
 - By hovering over text/fields, tool tips will show up giving additional details on the fields functionality. 
 - There are few fields that are required to run the program, if they are not filled out, a window will pop up informing you of the missing field. 
